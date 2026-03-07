@@ -48,6 +48,7 @@ function validate(fields: ContactFields): ContactErrors {
 export default function ContactPage() {
   const [fields, setFields] = useState<ContactFields>(initialFields);
   const [submitted, setSubmitted] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const errors = useMemo(() => validate(fields), [fields]);
   const isValid = Object.keys(errors).length === 0;
@@ -57,18 +58,26 @@ export default function ContactPage() {
     value: ContactFields[K],
   ) {
     setFields((prev) => ({ ...prev, [key]: value }));
+    if (success) {
+      setSuccess(false);
+    }
   }
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitted(true);
+    setSuccess(false);
 
     if (!isValid) {
       return;
     }
 
     setFields(initialFields);
+    setSuccess(true);
+    setSubmitted(false);
   }
+
+  const showErrors = submitted && !success;
 
   return (
     <section className="rounded-4 border bg-white p-4 shadow-sm">
@@ -84,11 +93,11 @@ export default function ContactPage() {
           </label>
           <input
             id="fullName"
-            className={`form-control ${submitted && errors.fullName ? "is-invalid" : ""}`}
+            className={`form-control ${showErrors && errors.fullName ? "is-invalid" : ""}`}
             value={fields.fullName}
             onChange={(event) => updateField("fullName", event.target.value)}
           />
-          {submitted && errors.fullName ? (
+          {showErrors && errors.fullName ? (
             <div className="invalid-feedback">{errors.fullName}</div>
           ) : null}
         </div>
@@ -99,11 +108,11 @@ export default function ContactPage() {
           </label>
           <input
             id="subject"
-            className={`form-control ${submitted && errors.subject ? "is-invalid" : ""}`}
+            className={`form-control ${showErrors && errors.subject ? "is-invalid" : ""}`}
             value={fields.subject}
             onChange={(event) => updateField("subject", event.target.value)}
           />
-          {submitted && errors.subject ? (
+          {showErrors && errors.subject ? (
             <div className="invalid-feedback">{errors.subject}</div>
           ) : null}
         </div>
@@ -115,11 +124,11 @@ export default function ContactPage() {
           <input
             id="email"
             type="email"
-            className={`form-control ${submitted && errors.email ? "is-invalid" : ""}`}
+            className={`form-control ${showErrors && errors.email ? "is-invalid" : ""}`}
             value={fields.email}
             onChange={(event) => updateField("email", event.target.value)}
           />
-          {submitted && errors.email ? (
+          {showErrors && errors.email ? (
             <div className="invalid-feedback">{errors.email}</div>
           ) : null}
         </div>
@@ -131,11 +140,11 @@ export default function ContactPage() {
           <textarea
             id="message"
             rows={5}
-            className={`form-control ${submitted && errors.message ? "is-invalid" : ""}`}
+            className={`form-control ${showErrors && errors.message ? "is-invalid" : ""}`}
             value={fields.message}
             onChange={(event) => updateField("message", event.target.value)}
           />
-          {submitted && errors.message ? (
+          {showErrors && errors.message ? (
             <div className="invalid-feedback">{errors.message}</div>
           ) : null}
         </div>
@@ -148,7 +157,7 @@ export default function ContactPage() {
           >
             Send message
           </button>
-          {submitted && isValid ? (
+          {success ? (
             <span className="text-success">Message sent successfully.</span>
           ) : null}
         </div>
