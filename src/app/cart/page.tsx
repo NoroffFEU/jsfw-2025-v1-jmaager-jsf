@@ -4,9 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/context/cart-context";
 import { formatCurrency } from "@/lib/format";
+import { useToast } from "@/components/toast-provider";
 
 export default function CartPage() {
   const { items, totalCost, removeFromCart, setQuantity } = useCart();
+  const { addToast } = useToast();
 
   if (!items.length) {
     return (
@@ -82,7 +84,13 @@ export default function CartPage() {
                 <button
                   type="button"
                   className="btn btn-outline-danger"
-                  onClick={() => removeFromCart(item.product.id)}
+                  onClick={() => {
+                    removeFromCart(item.product.id);
+                    addToast(
+                      `${item.product.title} removed from cart`,
+                      "danger",
+                    );
+                  }}
                 >
                   Remove
                 </button>

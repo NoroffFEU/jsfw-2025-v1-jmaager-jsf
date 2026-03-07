@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/context/cart-context";
 import { AppFooter } from "@/components/app-footer";
 import { AppHeader } from "@/components/app-header";
+import { ToastProvider } from "@/components/toast-provider";
 
 export const metadata: Metadata = {
   title: "GreenCart | Online Shop",
@@ -18,15 +19,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <CartProvider>
-          <div className="d-flex min-vh-100 flex-column">
-            <AppHeader />
-            <main className="container-xxl flex-grow-1 px-3 py-4">
-              {children}
-            </main>
-            <AppFooter />
-          </div>
-        </CartProvider>
+        <ToastProvider>
+          <CartProvider>
+            <div className="d-flex min-vh-100 flex-column">
+              <AppHeader />
+              <main className="container-xxl flex-grow-1 px-3 py-4">
+                {children}
+              </main>
+              <AppFooter />
+            </div>
+          </CartProvider>
+        </ToastProvider>
       </body>
     </html>
   );
