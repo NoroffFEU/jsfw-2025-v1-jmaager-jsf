@@ -103,6 +103,24 @@ a {
   font-size: 0.95rem;
 }
 
+.add-cart-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1090;
+  background: rgba(17, 24, 39, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.add-cart-modal {
+  width: min(460px, 100%);
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 1rem 2.5rem rgba(17, 24, 39, 0.25);
+}
+
 @media (max-width: 767.98px) {
   .container-xxl {
     padding-left: 0.8rem;
